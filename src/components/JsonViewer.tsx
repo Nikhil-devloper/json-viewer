@@ -64,8 +64,35 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
   };
 
   const scrollToTop = () => {
+    // Scroll output container
     if (outputRef.current) {
       outputRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // Scroll input container
+    if (textareaRef.current) {
+      textareaRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // Also scroll the parent containers
+    const inputContainer = textareaRef.current?.parentElement;
+    const outputContainer = outputRef.current?.parentElement?.parentElement;
+
+    if (inputContainer) {
+      inputContainer.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    if (outputContainer) {
+      outputContainer.scrollTo({
         top: 0,
         behavior: 'smooth'
       });
@@ -212,14 +239,14 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
   };
 
   return (
-    <div className="w-full h-[600px]">
+    <div className="w-full h-[80vh]">
       <div className="grid grid-cols-2 gap-4 p-4 h-full">
-        <div className="relative h-full">
+        <div className="relative h-full overflow-scroll">
           <textarea
             ref={textareaRef}
             value={inputText}
             onChange={handleInputChange}
-            className="w-full h-full p-4 font-mono text-sm rounded-lg bg-gray-900 text-gray-100 resize-none overflow-y-auto"
+            className="w-full h-full p-4 font-mono text-sm rounded-lg bg-gray-900 text-gray-100 resize-none overflow-y-auto border border-gray-700 focus:border-blue-500 outline-none"
             placeholder="Enter JSON here..."
           />
           {error && (
@@ -229,8 +256,8 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
           )}
         </div>
 
-        <div className="h-full flex flex-col">
-          <div className="mb-2 flex justify-end space-x-2">
+        <div className="flex flex-col relative h-full overflow-scroll">
+          <div className="fixed top-20 right-8 mb-2 flex justify-end space-x-2">
             <button
               onClick={() => setViewMode('code')}
               className={`px-3 py-1 rounded ${
@@ -252,10 +279,10 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
               Tree View
             </button>
           </div>
-          <div className="flex-1 rounded-lg bg-gray-900">
+          <div className="flex-1 rounded-lg bg-gray-900 border border-gray-700">
             <div 
               ref={outputRef}
-              className="h-full overflow-y-auto p-4"
+              className="p-4 overflow-scroll"
             >
               {viewMode === 'tree' ? renderTreeView() : renderCodeView()}
             </div>
