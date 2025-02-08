@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import JsonViewer from './components/JsonViewer';
+import EnvConverter from './components/EnvConverter';
+import JsonToEnv from './components/JsonToEnv';
 
 type Tab = 'json-viewer' | 'feature-2' | 'feature-3';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('json-viewer');
-
+  
   const sampleData = {
     name: "JSON Viewer Demo",
     description: "A simple JSON viewer component",
@@ -21,14 +23,48 @@ const App: React.FC = () => {
     }
   };
 
+  const [jsonText, setJsonText] = useState(JSON.stringify(sampleData, null, 2));
+  const [jsonData, setJsonData] = useState(sampleData);
+  const [envText, setEnvText] = useState('');
+  const [envData, setEnvData] = useState({});
+  const [jsonToEnvText, setJsonToEnvText] = useState('');
+  const [envOutput, setEnvOutput] = useState('');
+
+  const handleJsonUpdate = (text: string, data: any) => {
+    setJsonText(text);
+    setJsonData(data);
+  };
+
+  const handleEnvUpdate = (text: string, data: any) => {
+    setEnvText(text);
+    setEnvData(data);
+  };
+
+  const handleJsonToEnvUpdate = (text: string, output: string) => {
+    setJsonToEnvText(text);
+    setEnvOutput(output);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'json-viewer':
-        return <JsonViewer initialData={sampleData} />;
+        return <JsonViewer 
+          data={jsonData} 
+          inputText={jsonText} 
+          onUpdate={handleJsonUpdate}
+        />;
       case 'feature-2':
-        return <div className="text-white">Feature 2 Coming Soon</div>;
+        return <EnvConverter 
+          data={envData} 
+          inputText={envText} 
+          onUpdate={handleEnvUpdate}
+        />;
       case 'feature-3':
-        return <div className="text-white">Feature 3 Coming Soon</div>;
+        return <JsonToEnv 
+          data={envOutput} 
+          inputText={jsonToEnvText} 
+          onUpdate={handleJsonToEnvUpdate}
+        />;
       default:
         return null;
     }
@@ -56,7 +92,7 @@ const App: React.FC = () => {
                 : 'text-gray-400 hover:text-gray-200'
             }`}
           >
-            Feature 2
+            ENV to JSON
           </button>
           <button
             onClick={() => setActiveTab('feature-3')}
@@ -66,7 +102,7 @@ const App: React.FC = () => {
                 : 'text-gray-400 hover:text-gray-200'
             }`}
           >
-            Feature 3
+            JSON to ENV
           </button>
         </nav>
       </div>
