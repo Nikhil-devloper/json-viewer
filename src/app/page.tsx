@@ -20,22 +20,25 @@ const Home = () => {
       isDemo: true
     }
   });
-  const handleJsonUpdate = (newData: {
-    name: string;
-    description: string;
-    features: string[];
-    config: {
-      version: string;
-      isDemo: boolean;
-    };
-  }) => {
-    setJsonData(newData);
+  
+  // Store the input text separately from the parsed data
+  const [jsonInputText, setJsonInputText] = useState(JSON.stringify(jsonData, null, 2));
+
+  const handleJsonUpdate = (newText: string, parsedData: any) => {
+    setJsonInputText(newText);
+    setJsonData(parsedData);
   };
 
   const renderContent = () => {
     switch (activeTab) {
       case 'json-viewer':
-        return <JsonViewer initialData={jsonData} onDataChange={handleJsonUpdate} />;
+        return (
+          <JsonViewer 
+            data={jsonData} 
+            inputText={jsonInputText}
+            onUpdate={handleJsonUpdate}
+          />
+        );
       case 'feature-2':
         return <div className="text-white">Feature 2 Coming Soon</div>;
       case 'feature-3':
