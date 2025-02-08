@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import JSONPretty from 'react-json-pretty';
 import styles from './JsonViewer.module.css';
 
 interface JsonToEnvProps {
@@ -14,7 +15,7 @@ const JsonToEnv: React.FC<JsonToEnvProps> = ({
 }) => {
   const [error, setError] = useState('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const outputRef = useRef<HTMLTextAreaElement>(null);
+  const outputRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
@@ -97,13 +98,17 @@ const JsonToEnv: React.FC<JsonToEnvProps> = ({
 
         <div className="flex flex-col relative h-full overflow-scroll">
           <div className="flex-1 rounded-lg bg-gray-900 border border-gray-700">
-            <textarea
-              ref={outputRef}
-              value={data}
-              readOnly
-              className="w-full h-full p-4 font-mono text-sm bg-transparent text-gray-100 resize-none outline-none"
-              placeholder=".env output will appear here..."
-            />
+            <button
+              onClick={() => navigator.clipboard.writeText(data)}
+              className="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm z-10"
+            >
+              Copy
+            </button>
+            <div ref={outputRef} className="h-full select-text">
+              <pre className="p-4 font-mono text-sm text-gray-100 h-full">
+                {data}
+              </pre>
+            </div>
           </div>
         </div>
       </div>

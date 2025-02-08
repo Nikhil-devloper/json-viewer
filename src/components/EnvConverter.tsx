@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import JSONPretty from 'react-json-pretty';
-import styles from './JsonViewer.module.css';
 
 interface EnvConverterProps {
   inputText: string;
@@ -74,63 +73,61 @@ const EnvConverter: React.FC<EnvConverterProps> = ({
     }
   };
 
-  return (
-    <div className="w-full h-[80vh]">
-      <div className="grid grid-cols-2 gap-4 p-4 h-full">
-        <div className="relative h-full overflow-scroll">
-          <textarea
-            ref={inputRef}
-            value={inputText}
-            onChange={handleInputChange}
-            className="w-full h-full p-4 font-mono text-sm rounded-lg bg-gray-900 text-gray-100 resize-none overflow-y-auto border border-gray-700 focus:border-blue-500 outline-none"
-            placeholder="Paste your .env file content here..."
-          />
-          {error && (
-            <div className="absolute bottom-4 left-4 right-4 p-2 bg-red-500 text-white rounded">
-              {error}
-            </div>
-          )}
-        </div>
+  const renderCodeView = () => {
+    return (
+      <JSONPretty 
+        data={data} 
+        theme={{
+          main: 'line-height:1.3;color:#66d9ef;background:transparent;overflow:auto;',
+          key: 'color:#f92672;',
+          string: 'color:#fd971f;',
+          value: 'color:#a6e22e;',
+          boolean: 'color:#ac81fe;',
+        }}
+      />
+    );
+  };
 
-        <div className="flex flex-col relative h-full overflow-scroll">
-          <div className="flex-1 rounded-lg bg-gray-900 border border-gray-700">
-            <div 
-              ref={outputRef}
-              className="p-4 overflow-scroll"
-            >
-              <JSONPretty 
-                data={data}
-                theme={{
-                  main: 'line-height:1.3;color:#66d9ef;background:transparent;overflow:auto;',
-                  key: 'color:#f92672;',
-                  string: 'color:#fd971f;',
-                  value: 'color:#a6e22e;',
-                  boolean: 'color:#ac81fe;',
-                }}
-              />
-            </div>
+  const renderTreeView = () => {
+    return (
+      <pre className="p-4 font-mono text-gray-200">
+        {JSON.stringify(data, null, 2)}
+      </pre>
+    );
+  };
+
+  return (
+    <div className="flex h-full">
+      {/* Input Section */}
+      <div className="flex-1 p-4 select-none">
+        <textarea
+          ref={inputRef}
+          value={inputText}
+          onChange={handleInputChange}
+          className="w-full h-full bg-gray-800 text-gray-200 p-4 rounded-lg font-mono"
+          placeholder="Paste your ENV content here..."
+        />
+      </div>
+
+      {/* Output Section */}
+      <div className="flex-1 p-4 select-none">
+        <div className="relative">
+          <button
+            onClick={() => navigator.clipboard.writeText(JSON.stringify(data, null, 2))}
+            className="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm"
+          >
+            Copy
+          </button>
+          <div 
+            ref={outputRef}
+            className="w-full h-full bg-gray-800 rounded-lg overflow-auto select-text"
+          >
+            <pre className="p-4 font-mono text-gray-200">
+              {JSON.stringify(data, null, 2)}
+            </pre>
           </div>
         </div>
       </div>
-      <button
-        onClick={scrollToTop}
-        className={styles.scrollTopButton}
-        aria-label="Scroll to top"
-      >
-        <svg 
-          className="w-5 h-5" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M5 10l7-7m0 0l7 7m-7-7v18" 
-          />
-        </svg>
-      </button>
     </div>
   );
 };

@@ -241,7 +241,7 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
   return (
     <div className="w-full h-[80vh]">
       <div className="grid grid-cols-2 gap-4 p-4 h-full">
-        <div className="relative h-full overflow-scroll">
+        <div className="relative h-full overflow-scroll select-none">
           <textarea
             ref={textareaRef}
             value={inputText}
@@ -256,7 +256,7 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
           )}
         </div>
 
-        <div className="flex flex-col relative h-full overflow-scroll">
+        <div className="flex flex-col relative h-full overflow-scroll select-none">
           <div className="fixed top-20 right-8 mb-2 flex justify-end space-x-2">
             <button
               onClick={() => setViewMode('code')}
@@ -278,11 +278,18 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
             >
               Tree View
             </button>
+            <button
+              onClick={() => navigator.clipboard.writeText(JSON.stringify(data, null, 2))}
+              className="px-3 py-1 rounded bg-gray-700 text-gray-300 hover:bg-gray-600"
+            >
+              Copy
+            </button>
           </div>
           <div className="flex-1 rounded-lg bg-gray-900 border border-gray-700">
             <div 
               ref={outputRef}
-              className="p-4 overflow-scroll"
+              className="p-4 overflow-scroll select-text"
+              tabIndex={0}
             >
               {viewMode === 'tree' ? renderTreeView() : renderCodeView()}
             </div>
