@@ -1,12 +1,12 @@
-'use client';
 import React, { useState } from 'react';
-import JsonViewer from '../components/JsonViewer';
+import JsonViewer from './components/JsonViewer';
 
 type Tab = 'json-viewer' | 'feature-2' | 'feature-3';
 
-const Home = () => {
+const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('json-viewer');
-  const [jsonData, setJsonData] = useState({
+
+  const sampleData = {
     name: "JSON Viewer Demo",
     description: "A simple JSON viewer component",
     features: [
@@ -19,23 +19,12 @@ const Home = () => {
       version: "1.0.0",
       isDemo: true
     }
-  });
-  const handleJsonUpdate = (newData: {
-    name: string;
-    description: string;
-    features: string[];
-    config: {
-      version: string;
-      isDemo: boolean;
-    };
-  }) => {
-    setJsonData(newData);
   };
 
   const renderContent = () => {
     switch (activeTab) {
       case 'json-viewer':
-        return <JsonViewer initialData={jsonData} onDataChange={handleJsonUpdate} />;
+        return <JsonViewer initialData={sampleData} />;
       case 'feature-2':
         return <div className="text-white">Feature 2 Coming Soon</div>;
       case 'feature-3':
@@ -67,7 +56,7 @@ const Home = () => {
                 : 'text-gray-400 hover:text-gray-200'
             }`}
           >
-            ENV to JSON
+            Feature 2
           </button>
           <button
             onClick={() => setActiveTab('feature-3')}
@@ -77,15 +66,15 @@ const Home = () => {
                 : 'text-gray-400 hover:text-gray-200'
             }`}
           >
-            ENV to JSON
+            Feature 3
           </button>
         </nav>
       </div>
-      <div className="flex-1 min-h-0">
+      <div className="flex-1 overflow-hidden">
         {renderContent()}
       </div>
     </div>
   );
 };
 
-export default Home;
+export default App; 
