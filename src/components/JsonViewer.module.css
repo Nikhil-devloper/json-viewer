@@ -1,0 +1,168 @@
+.jsonViewer {
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.2;
+  padding: 1rem;
+  color: #e6e6e6;
+}
+
+.indent {
+  margin-left: 1rem;
+  margin-top: 0.05rem;
+  margin-bottom: 0.05rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.indent > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.key {
+  color: #881391;
+  white-space: nowrap;
+}
+
+.string {
+  color: #c41a16;
+}
+
+.number {
+  color: #1c00cf;
+}
+
+.boolean {
+  color: #0000ff;
+}
+
+.null {
+  color: #808080;
+}
+
+.arrow {
+  cursor: pointer;
+  user-select: none;
+  margin-right: 4px;
+  color: #666;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  position: relative;
+  top: -2px;
+}
+
+/* Add specific selector for nested arrows */
+.property .arrow,
+.indent .arrow {
+  top: -2px; /* Same offset for nested arrows */
+}
+
+.arrow:hover {
+  color: #fff;
+}
+
+.arrayContainer,
+.objectContainer {
+  display: flex;
+  flex-direction: column;
+  color: #e6e6e6;
+  margin: 0.05rem 0;
+}
+
+.arrayContainer > div,
+.objectContainer > div {
+  margin: 0.05rem 0;
+}
+
+.viewModeToggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.viewModeButton {
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.viewModeButton.active {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.viewModeButton:not(.active) {
+  background-color: #374151;
+  color: #9ca3af;
+}
+
+.viewModeButton:not(.active):hover {
+  background-color: #4b5563;
+}
+
+.scrollTopButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(59, 130, 246, 0.9);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 100;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.scrollTopButton:hover {
+  background-color: rgba(37, 99, 235, 1);
+  transform: translateY(-2px);
+}
+
+.scrollTopButton:active {
+  transform: translateY(0);
+}
+
+.property {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+/* Add new class for the container header */
+.containerHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+/* Add new styles for comma */
+.comma {
+  margin-left: 0;
+  display: inline;
+}
+
+.containerFooter {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Add extra indentation for objects inside arrays */
+.arrayContainer .objectContainer,
+.arrayContainer .arrayContainer {
+  margin-left: 0.5rem;
+  margin-top: 0;
+  margin-bottom: 0;
+} 
