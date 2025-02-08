@@ -34,7 +34,6 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
       c: [3, 4, 5]
     }
   },
-  className = '',
   onDataChange
 }) => {
   const [jsonInput, setJsonInput] = useState(JSON.stringify(initialData, null, 2));
@@ -48,7 +47,8 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
       setJsonData(parsed);
       onDataChange?.(parsed);
       setError('');
-    } catch (err) {
+    } catch (error) {
+      console.error('JSON parsing error:', error);
       setError('Invalid JSON format');
     }
   };
