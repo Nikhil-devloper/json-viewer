@@ -3,8 +3,12 @@ import JSONPretty from 'react-json-pretty';
 
 interface EnvConverterProps {
   inputText: string;
-  onUpdate: (text: string, parsedJson: any) => void;
-  data: any;
+  onUpdate: (text: string, parsedJson: Record<string, string>) => void;
+  data: Record<string, string>;
+}
+
+interface JsonData {
+  [key: string]: string | number | boolean | null | JsonData | Array<any>;
 }
 
 const EnvConverter: React.FC<EnvConverterProps> = ({
@@ -15,6 +19,7 @@ const EnvConverter: React.FC<EnvConverterProps> = ({
   const [error, setError] = useState('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const outputRef = useRef<HTMLDivElement>(null);
+  const [jsonData, setJsonData] = useState<JsonData | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
@@ -34,42 +39,9 @@ const EnvConverter: React.FC<EnvConverterProps> = ({
 
       onUpdate(newText, json);
       setError('');
-    } catch (err) {
+    } catch {
       setError('Invalid .env format');
       onUpdate(newText, data);
-    }
-  };
-
-  const scrollToTop = () => {
-    if (inputRef.current) {
-      inputRef.current.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
-
-    if (outputRef.current) {
-      outputRef.current.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
-
-    const inputContainer = inputRef.current?.parentElement;
-    const outputContainer = outputRef.current?.parentElement?.parentElement;
-
-    if (inputContainer) {
-      inputContainer.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
-
-    if (outputContainer) {
-      outputContainer.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
     }
   };
 

@@ -3,6 +3,7 @@ import JsonViewer from './components/JsonViewer';
 import EnvConverter from './components/EnvConverter';
 import JsonToEnv from './components/JsonToEnv';
 import NavBar from './components/NavBar';
+import { JsonData } from './types/json';
 
 type Tab = 'json-viewer' | 'feature-2' | 'feature-3';
 
@@ -25,13 +26,13 @@ const App: React.FC = () => {
   };
 
   const [jsonText, setJsonText] = useState(JSON.stringify(sampleData, null, 2));
-  const [jsonData, setJsonData] = useState(sampleData);
+  const [jsonData, setJsonData] = useState<JsonData>(sampleData as JsonData);
   const [envText, setEnvText] = useState('');
   const [envData, setEnvData] = useState({});
   const [jsonToEnvText, setJsonToEnvText] = useState('');
   const [envOutput, setEnvOutput] = useState('');
 
-  const handleJsonUpdate = (text: string, data: { name: string; description: string; features: string[]; config: { version: string; isDemo: boolean; } }) => {
+  const handleJsonUpdate = (text: string, data: JsonData) => {
     setJsonText(text);
     setJsonData(data);
   };
@@ -47,7 +48,7 @@ const App: React.FC = () => {
   };
 
   const renderContent = () => {
-    switch (activeTab) {
+    switch (activeTab) {  
       case 'json-viewer':
         return <JsonViewer 
           data={jsonData} 

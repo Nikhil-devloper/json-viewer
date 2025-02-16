@@ -1,6 +1,9 @@
 import React, { useState, useRef } from 'react';
-import JSONPretty from 'react-json-pretty';
 import styles from './JsonViewer.module.css';
+
+interface JsonData {
+  [key: string]: string | number | boolean | null | JsonData | Array<any>;
+}
 
 interface JsonToEnvProps {
   inputText: string;
@@ -23,12 +26,12 @@ const JsonToEnv: React.FC<JsonToEnvProps> = ({
       const json = JSON.parse(newText);
       const envLines: string[] = [];
 
-      const processObject = (obj: any, prefix: string = '') => {
+      const processObject = (obj: JsonData, prefix: string = '') => {
         Object.entries(obj).forEach(([key, value]) => {
           const envKey = prefix ? `${prefix}_${key}` : key;
           
           if (typeof value === 'object' && value !== null) {
-            processObject(value, envKey);
+            processObject(value as JsonData, envKey);
           } else {
             envLines.push(`${envKey}=${String(value)}`);
           }
@@ -39,9 +42,9 @@ const JsonToEnv: React.FC<JsonToEnvProps> = ({
       const envOutput = envLines.join('\n');
       onUpdate(newText, envOutput);
       setError('');
-    } catch (err) {
-      setError('Invalid JSON format');
-      onUpdate(newText, data);
+    } catch {
+      setError('Invalid JSON input');
+      onUpdate(inputText, data);
     }
   };
 

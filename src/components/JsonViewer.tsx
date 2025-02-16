@@ -1,14 +1,15 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import JSONPretty from 'react-json-pretty';
 import styles from './JsonViewer.module.css';
+import { JsonData } from '../types/json';
 
 type ViewMode = 'code' | 'tree';
 
 interface JsonViewerProps {
-  data: any;
+  data: JsonData;
   inputText: string;
-  onUpdate: (text: string, parsedData: any) => void;
+  onUpdate: (text: string, parsedData: JsonData) => void;
 }
 
 const JsonViewer: React.FC<JsonViewerProps> = ({ 
@@ -21,6 +22,7 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
   const [viewMode, setViewMode] = useState<ViewMode>('code');
   const outputRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [jsonData, setJsonData] = useState<JsonData | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
@@ -100,7 +102,7 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
   };
 
   const renderValue = (
-    value: any, 
+    value: string | number | boolean | null | JsonData | Array<string | number | boolean | null | JsonData>,
     path: string = '', 
     index?: number, 
     arrayLength?: number
@@ -236,6 +238,16 @@ const JsonViewer: React.FC<JsonViewerProps> = ({
         }}
       />
     );
+  };
+
+  const handleJsonInput = (input: string) => {
+    try {
+      const parsed = JSON.parse(input);
+      setJsonData(parsed);
+      setError('');
+    } catch {
+      setError('Invalid JSON input');
+    }
   };
 
   return (
